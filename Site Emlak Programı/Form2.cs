@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -28,21 +28,30 @@ namespace Site_Emlak_Programı
 
         private void InitializeComboBoxes()
         {
+            LoadComboBoxData(comboBox1, "ComboBox1Items");
+            LoadComboBoxData(comboBox2, "ComboBox2Items");
+            LoadComboBoxData(comboBox3, "ComboBox3Items");
+            LoadComboBoxData(comboBox4, "ComboBox4Items");
+        }
 
-            List<string> comboBox1Items = new List<string> { "Zambak", "Papatya", "Gül", "Menekşe" };
-            comboBox1.Items.AddRange(comboBox1Items.ToArray());
-
-
-            List<string> comboBox2Items = new List<string> { "Satılık", "Kiralık" };
-            comboBox2.Items.AddRange(comboBox2Items.ToArray());
-
-
-            List<string> comboBox3Items = new List<string> { "1+1", "2+1", "3+1", "4+1" };
-            comboBox3.Items.AddRange(comboBox3Items.ToArray());
-
-
-            List<string> comboBox4Items = new List<string> { "A", "B", "C", "D" };
-            comboBox4.Items.AddRange(comboBox4Items.ToArray());
+        private void LoadComboBoxData(ComboBox comboBox, string tableName)
+        {
+            try
+            {
+                baglan.Open();
+                SqlCommand komut = new SqlCommand($"SELECT Item FROM {tableName}", baglan);
+                SqlDataReader reader = komut.ExecuteReader();
+                comboBox.Items.Clear();
+                while (reader.Read())
+                {
+                    comboBox.Items.Add(reader["Item"].ToString());
+                }
+                reader.Close();
+            }
+            finally
+            {
+                baglan.Close();
+            }
         }
 
         private void verilerigöster()
